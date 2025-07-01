@@ -1,6 +1,10 @@
+#include "Core/Math.h"
 #include <iostream>
 
+#define NAME "Alex"
+
 int main() {
+	std::cout << NAME << std::endl;
 	std::cout << "Hello World!" << std::endl;
-	std::cout << "This is here to see if git is working correctly" << std::endl;
+	std::cout << viper::pi << std::endl;
 }

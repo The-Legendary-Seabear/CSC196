@@ -6,6 +6,7 @@
 #include <Renderer/Renderer.h>
 #include <vector>
 #include "Core/Time.h"
+#include "Input/InputSystem.h"
 
 #define NAME "Alex"
 
@@ -18,8 +19,12 @@ int main(int argc, char* argv[]) {
     renderer.Initialize();
     renderer.CreateWindow("Viper Engine", 1280, 1024);
 
+    viper::InputSystem input;
+	input.Initialize();
+
     SDL_Event e;
     bool quit = false;
+
     //create stars
     std::vector<viper::vec2> stars;
     for (int i = 0; i < 100; i++) {
@@ -35,11 +40,23 @@ int main(int argc, char* argv[]) {
                 quit = true;
             }
         }
+		input.Update();
+
+        if (input.GetKeyReleased(SDL_SCANCODE_A)) {
+            std::cout << "pressed\n";
+        }
+
+        if (input.GetMouseButtonDown(0)) {
+			std::cout << "mouse pressed\n";
+        }
+
+        viper::vec2 mouse = input.GetMousePosition();
+        std::cout << mouse.x << " " << mouse.y << std::endl;
 
         renderer.SetColor(0, 0, 0);
         renderer.Clear();
 
-
+        
 
         viper::vec2 speed{ 200.0f, 0.0f };
         float length = speed.Length();

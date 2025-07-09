@@ -1,6 +1,6 @@
 #pragma once
-#include <cassert>
 #include "Math.h"
+#include <cassert>
 
 namespace viper {
 	template<typename T>
@@ -34,6 +34,7 @@ namespace viper {
 		Vector2& operator /= (float s) { x /= s.x; y /= s.y; return *this; }
 
 		// square root ((x * x) + ( y * y))
+		/// <summary>
 		float LengthSqr() const { return (x * x) + (y * y); }
 		float Length() const { return viper::math::sqrtf(LengthSqr()); }
 	};

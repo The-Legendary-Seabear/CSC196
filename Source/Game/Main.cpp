@@ -1,12 +1,14 @@
 #include "Math/Math.h"
 #include "Math/Vector2.h"
 #include "Core/Random.h"
+#include "Core/Time.h"
+#include "Input/InputSystem.h"
+#include "Audio/AudioSystem.h"
+
 #include <SDL3/SDL.h>
 #include <iostream>
 #include <Renderer/Renderer.h>
 #include <vector>
-#include "Core/Time.h"
-#include "Input/InputSystem.h"
 #include <fmod.hpp>
 
 #define NAME "Alex"
@@ -25,19 +27,27 @@ int main(int argc, char* argv[]) {
 	input.Initialize();
 
     //create audio system
+    viper::AudioSystem audio;
+    audio.Inititalize();
+
     /*FMOD::System* audio;
     FMOD::System_Create(&audio);
 
     void* extradriverdata = nullptr;
-    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);
+    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);*/
 
 
     //create objects
+
+    /*
     FMOD::Sound* sound = nullptr;
     audio->createSound("test.wav", FMOD_DEFAULT, 0, &sound);
 
-    audio->playSound(sound, 0, false, nullptr);*/
+    audio->playSound(sound, 0, false, nullptr);
+    */
 
+    //initialize sounds
+	audio.AddSound("test.wav", "testSound");
 
     //create stars
     std::vector<viper::vec2> stars;
@@ -64,14 +74,10 @@ int main(int argc, char* argv[]) {
         //update engine systems
 		input.Update();
 
-
-        //get input
-
-        /*if (input.GetKeyReleased(SDL_SCANCODE_A)) {
-            std::cout << "pressed\n";
-        }*/
-
+        //play drum sounds
         
+
+        //get input 
         
 
         if (input.GetMouseButtonPressed(viper::InputSystem::MouseButton::Left)) {
@@ -84,8 +90,8 @@ int main(int argc, char* argv[]) {
             else if ((position - points.back()).Length() > 10) points.push_back(position);
         }
 
-        /*viper::vec2 mouse = input.GetMousePosition();
-        std::cout << mouse.x << " " << mouse.y << std::endl;*/
+
+        //play drum sounds
 
         
 
@@ -94,7 +100,7 @@ int main(int argc, char* argv[]) {
         renderer.Clear();
 
         
-        /*
+        
         viper::vec2 speed{ 200.0f, 0.0f };
         float length = speed.Length();
         for (auto& star : stars) {
@@ -107,7 +113,7 @@ int main(int argc, char* argv[]) {
             renderer.SetColor(viper::random::getRandomInt(0, 256), viper::random::getRandomInt(0, 256), viper::random::getRandomInt(0, 256));
             renderer.DrawPoint(star.x, star.y);
         }
-        */
+        
 
         for (int i = 0; i < (int)points.size() - 1; i++) {
 			renderer.SetColor(viper::random::getRandomInt(0, 256), viper::random::getRandomInt(0, 256), viper::random::getRandomInt(0, 256));
@@ -119,6 +125,7 @@ int main(int argc, char* argv[]) {
 }
 
     renderer.Shutdown();
+	audio.Shutdown();
 
     return 0;
 }

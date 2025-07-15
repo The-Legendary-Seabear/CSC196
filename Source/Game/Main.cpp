@@ -27,27 +27,33 @@ int main(int argc, char* argv[]) {
 	input.Initialize();
 
     //create audio system
-    viper::AudioSystem audio;
-    audio.Inititalize();
+    //viper::AudioSystem audio;
+    //audio.Inititalize();
 
-    /*FMOD::System* audio;
+    FMOD::System* audio;
     FMOD::System_Create(&audio);
 
     void* extradriverdata = nullptr;
-    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);*/
+    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);
 
 
     //create objects
 
-    /*
+    
     FMOD::Sound* sound = nullptr;
-    audio->createSound("test.wav", FMOD_DEFAULT, 0, &sound);
+    
+    std::vector<FMOD::Sound*> sounds;
+    audio->createSound("bass.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
 
-    audio->playSound(sound, 0, false, nullptr);
-    */
+    audio->createSound("snare.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("open-hat.wav", FMOD_DEFAULT, 0, &sound);
+	sounds.push_back(sound);
 
     //initialize sounds
-	audio.AddSound("test.wav", "testSound");
+	//audio.AddSound("test.wav", "testSound");
 
     //create stars
     std::vector<viper::vec2> stars;
@@ -76,6 +82,13 @@ int main(int argc, char* argv[]) {
 
         //play drum sounds
         
+		if (input.GetKeyDown(SDL_SCANCODE_Q) && !input.GetPreviousKeyDown(SDL_SCANCODE_Q)) audio->playSound(sounds[0], nullptr, false, nullptr);
+		if (input.GetKeyDown(SDL_SCANCODE_W) && !input.GetPreviousKeyDown(SDL_SCANCODE_W)) audio->playSound(sounds[1], nullptr, false, nullptr);
+		if (input.GetKeyDown(SDL_SCANCODE_E) && !input.GetPreviousKeyDown(SDL_SCANCODE_E)) audio->playSound(sounds[2], nullptr, false, nullptr);
+    
+    
+        
+    
 
         //get input 
         
@@ -125,7 +138,7 @@ int main(int argc, char* argv[]) {
 }
 
     renderer.Shutdown();
-	audio.Shutdown();
+	//audio.Shutdown();
 
     return 0;
 }

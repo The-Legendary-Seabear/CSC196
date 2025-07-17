@@ -5,10 +5,14 @@
 namespace viper {
 	template<typename T>
 	struct Vector3 {
-		T x, y, z;
+		
+		union {
+			struct { T x, y, z; };
+			struct { T r, g, b; };
+		};
 
 		Vector3() = default;
-		Vector3(T x, T y) : x{ x }, y{ y }, z{ z } {}
+		Vector3(T x, T y, T z) : x{ x }, y{ y }, z{ z } {}
 
 		T operator [] (unsigned int index) const { assert(index < 3);  return (&x)[index]; }
 		T& operator [] (unsigned int index) { assert(index < 3);  return (&x)[index]; }
@@ -29,10 +33,11 @@ namespace viper {
 		Vector3& operator *= (const Vector3& v) { x *= v.x; y *= v.y; z *= v.z; return *this; }
 		Vector3& operator /= (const Vector3& v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
 
-		Vector3& operator += (float s) { x += s.x; y += s.y; return *this; }
-		Vector3& operator -= (float s) { x -= s.x; y -= s.y; return *this; }
-		Vector3& operator *= (float s) { x *= s.x; y *= s.y; return *this; }
-		Vector3& operator /= (float s) { x /= s.x; y /= s.y; return *this; }
+		Vector3& operator += (float s) { x += s.x; y += s.y; z += s.z; return *this;
+		}
+		Vector3& operator -= (float s) { x -= s.x; y -= s.y; z -= s.z; return *this; }
+		Vector3& operator *= (float s) { x *= s.x; y *= s.y; z *= s.z; return *this; }
+		Vector3& operator /= (float s) { x /= s.x; y /= s.y; z /= s.z; return *this; }
 
 		// square root ((x * x) + ( y * y))
 		

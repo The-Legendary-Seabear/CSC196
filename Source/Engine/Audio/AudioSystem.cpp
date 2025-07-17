@@ -10,7 +10,7 @@ namespace viper {
 	/// </summary>
 	/// <param name="result">The FMOD_RESULT value returned by an FMOD function call.</param>
 	/// <returns>true if the result indicates success (FMOD_OK); false otherwise, after printing the error message.</returns>
-	bool CheckFMODResult(FMOD_RESULT result) {
+	bool AudioSystem::CheckFMODResult(FMOD_RESULT result) {
 		if (result != FMOD_OK) {
 			std::cerr << FMOD_ErrorString(result) << std::endl;
 			return false;

@@ -47,14 +47,14 @@
     <ClCompile Include="Core\StringHelper.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Model.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Actor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Model.cpp">
+      <Filter>Source\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

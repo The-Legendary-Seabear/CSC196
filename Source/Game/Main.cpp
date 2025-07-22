@@ -14,6 +14,7 @@
 
 #include "Game/Player.h"
 #include "Game/SpaceGame.h"
+#include "Framework/Game.h"
 
 #include <SDL3/SDL.h>
 #include <iostream>
@@ -35,7 +36,9 @@ int main(int argc, char* argv[]) {
 
     //create objects
 
+	viper::Scene scene = viper::Scene();
 
+	
 
     
     FMOD::Sound* sound = nullptr;
@@ -65,9 +68,9 @@ int main(int argc, char* argv[]) {
         }
 
         viper::GetEngine().Update();
-        scene.Update(viper::GetEngine().GetTime().GetDeltaTime());
+        //scene.Update(viper::GetEngine().GetTime().GetDeltaTime());
 
-		scene.Draw(viper::GetEngine().GetRenderer());
+        game->Update();
 
         if (viper::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
         
@@ -91,12 +94,14 @@ int main(int argc, char* argv[]) {
 		//model.Draw(renderer, input.GetMousePosition(), time.GetTime(), 10);
         
         
-        scene.Draw(viper::GetEngine().GetRenderer());
+        //scene.Draw(viper::GetEngine().GetRenderer());
 
+		game->Draw();
         viper::GetEngine().GetRenderer().Present();
 
 }
 
+    game->Shutdown();
     viper::GetEngine().Shutdown();
 
     return 0;

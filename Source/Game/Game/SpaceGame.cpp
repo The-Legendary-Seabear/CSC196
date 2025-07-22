@@ -4,6 +4,8 @@
 #include "Math/Vector2.h"
 #include "Renderer/Model.h"
 #include "Player.h"
+#include "Engine.h"
+#include "Renderer/Renderer.h"
 
 #include <vector>
 
@@ -11,42 +13,40 @@ bool SpaceGame::Initialize() {
     m_scene = std::make_unique<viper::Scene>();
 
     std::vector<viper::vec2> points{
-        {4, 0},
-        {0, 10},
-        {3, 7},
-        {6, 4},
-        {9, 0},
-        {6, -4},
-        {3, -7},
-        {0, -10},
-        {4, 0},
+        {5, 0},
+        {-4, -3},
+        {-2, 0},
+        {-4, 3},
+        {5, 0},
     };
 
-    std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(points, viper::vec3{ 0, 0, 1 });
+    std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(points, viper::vec3{ 0.0f, 0.4f, 1.0f });
 
-    /*
-    for (int i = 0; i < 10; i ++) {
-    viper::Transform transform{ viper::vec2{viper::random::getRandomFloat() * 1280, viper::random::getRandomFloat() * 1040}, 0, 20};
-    std::unique_ptr<Player> player = std::make_unique<Player>( transform, model );
-    scene.AddActor(std::move(player));
-    }
-    */
-
-    viper::Transform transform{ viper::vec2{640, 520}, 0, 20 };
+    
+    //for (int i = 0; i < 10; i ++) {
+    //viper::Transform transform{ viper::vec2{viper::random::getRandomFloat() * 1280, viper::random::getRandomFloat() * 1040}, 0, 20};
+    //std::unique_ptr<Player> player = std::make_unique<Player>( transform, model );
+    //m_scene->AddActor(std::move(player));
+    //}
+    
+    
+    
+    viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 20};
     std::unique_ptr<Player> player = std::make_unique<Player>(transform, model);
     m_scene->AddActor(std::move(player));
+    
 
     return true;
 }
 
 void SpaceGame::Update() {
-
+    m_scene->Update(viper::GetEngine().GetTime().GetDeltaTime());
 }
 
 void SpaceGame::Shutdown() {
-
 }
 
 void SpaceGame::Draw() {
+    m_scene->Draw(viper::GetEngine().GetRenderer());
 
 }

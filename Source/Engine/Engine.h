@@ -36,5 +36,5 @@ namespace viper {
 	};
 
 	Engine& GetEngine();
-	inline Renderer& GetRenderer() { return GetEngine().GetRenderer();  }
+	//inline Renderer& GetRenderer() { return GetEngine().GetRenderer();  }
 }

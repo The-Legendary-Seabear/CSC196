@@ -11,6 +11,8 @@
 #include "Framework/Actor.h"
 #include "Framework/Scene.h"
 #include "Engine.h"
+#include "Renderer/Font.h"
+#include "Renderer/Text.h"
 
 #include "Game/Player.h"
 #include "Game/SpaceGame.h"
@@ -38,7 +40,11 @@ int main(int argc, char* argv[]) {
 
 	viper::Scene scene = viper::Scene();
 
-	
+    viper::Font* font = new viper::Font();
+    font->Load("Archeologicaps.ttf", 20);
+
+    viper::Text* text = new viper::Text(font);
+    text->Create(viper::GetEngine().GetRenderer(), "Hello World", viper::vec3{ 1, 1, 1});
 
     
     FMOD::Sound* sound = nullptr;
@@ -95,6 +101,9 @@ int main(int argc, char* argv[]) {
         
         
         //scene.Draw(viper::GetEngine().GetRenderer());
+
+        text->Draw(viper::GetEngine().GetRenderer(), 40.0f, 40.0f);
+
 
 		game->Draw();
         viper::GetEngine().GetRenderer().Present();

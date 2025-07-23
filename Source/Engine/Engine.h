@@ -24,7 +24,7 @@ namespace viper {
 		InputSystem& GetInput() { return *m_input ; }
 
 		Time& GetTime() { return m_time; }
-		
+
 	private:
 		Time m_time;
 
@@ -36,5 +36,5 @@ namespace viper {
 	};
 
 	Engine& GetEngine();
-	//inline Renderer& GetRenderer() { return GetEngine().GetRenderer();  }
+	inline Renderer& GetRenderer() { return GetEngine().GetRenderer();  }
 }

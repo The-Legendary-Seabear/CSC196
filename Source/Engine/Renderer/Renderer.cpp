@@ -9,6 +9,12 @@ namespace viper {
             return false;
         }
 
+        if (!TTF_Init()) {
+            std::cerr << "TTF_Init Error: " << SDL_GetError() << std::endl;
+            return false;
+        }
+
+
         return true;
     }
 
@@ -57,6 +63,8 @@ namespace viper {
 
     void Renderer::Shutdown()
     {
+
+        TTF_Quit();
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);
         SDL_Quit();

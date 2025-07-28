@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
         viper::GetEngine().Update();
         //scene.Update(viper::GetEngine().GetTime().GetDeltaTime());
 
-        game->Update();
+        game->Update(viper::GetEngine().GetTime().GetDeltaTime());
 
         if (viper::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
         

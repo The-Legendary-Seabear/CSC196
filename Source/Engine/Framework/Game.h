@@ -13,6 +13,8 @@ public:
 	virtual void Shutdown() = 0;
 
 protected:
+	int m_score{ 0 };
+	int m_lives{ 0 };
 	std::unique_ptr< class Scene> m_scene;
 	};
 }

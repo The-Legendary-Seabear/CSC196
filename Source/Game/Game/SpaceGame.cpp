@@ -4,6 +4,7 @@
 #include "Math/Vector2.h"
 #include "Renderer/Model.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Engine.h"
 #include "Renderer/Renderer.h"
 
@@ -21,20 +22,24 @@ bool SpaceGame::Initialize() {
     };
 
     std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(points, viper::vec3{ 0.0f, 0.4f, 1.0f });
-
-    
-    //for (int i = 0; i < 10; i ++) {
-    //viper::Transform transform{ viper::vec2{viper::random::getRandomFloat() * 1280, viper::random::getRandomFloat() * 1040}, 0, 20};
-    //std::unique_ptr<Player> player = std::make_unique<Player>( transform, model );
-    //m_scene->AddActor(std::move(player));
-    //}
     
     
-    
-    viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 20};
+    viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 3};
     std::unique_ptr<Player> player = std::make_unique<Player>(transform, model);
+    player->speed = 500.0f;
+    player->rotationRate = 180.0f;
+    player->damping = 0.5f;
+    player->name = "player";
     m_scene->AddActor(std::move(player));
     
+    std::shared_ptr<viper::Model> enemyModel = std::make_shared <viper::Model>(points, viper::vec3{ 1.0f, 1.0f, 0.0f });
+    for (int i = 0; i < 5; i ++) {
+    viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 6};
+    std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>( transform, enemyModel );
+	enemy->damping = 0.5f;
+    enemy->speed = 200;
+    m_scene->AddActor(std::move(enemy));
+    }
 
     return true;
 }

@@ -13,6 +13,7 @@
 #include "Engine.h"
 #include "Renderer/Font.h"
 #include "Renderer/Text.h"
+#include "Core/File.h"
 
 #include "Game/Player.h"
 #include "Game/SpaceGame.h"
@@ -28,6 +29,46 @@
 
 
 int main(int argc, char* argv[]) {
+
+    // Get current directory path
+    std::cout << "Directory Operations:\n";
+    std::cout << "Current directory: " << viper::GetCurrentDirectory() << "\n";
+
+    // Set current directory path (current path + "Assets")
+    std::cout << "Setting directory to 'Assets'...\n";
+    viper::SetCurrentDirectory("Assets");
+    std::cout << "New directory: " << viper::GetCurrentDirectory() << "\n\n";
+
+    // Get filenames in the current directory
+    std::cout << "Files in Directory:\n";
+    auto filenames = viper::GetFilesInDirectory(viper::GetCurrentDirectory());
+    for (const auto& filename : filenames) {
+        std::cout << filename << "\n";
+    }
+    std::cout << "\n";
+
+    // Get filename (filename.extension) only
+    if (!filenames.empty()) {
+        std::cout << "Path Analysis:\n";
+        std::string filename = viper::GetFilename(filenames[0]);
+        std::cout << "Filename only: " << filename << "\n";
+
+        // Get extension only
+        std::string ext = viper::GetExtension(filenames[0]);
+        std::cout << "Extension: " << ext << "\n\n";
+    }
+
+    // Read and display text file
+    std::cout << "Text File Reading:\n";
+    std::string str;
+    bool success = viper::ReadTextFile("test.txt", str);
+    if (success) {
+        std::cout << "Contents of test.txt:\n";
+        std::cout << str << "\n";
+    }
+    else {
+        std::cout << "Failed to read test.txt\n";
+    }
 
    //initialize engine
     viper::GetEngine().Initialize();
@@ -102,10 +143,12 @@ int main(int argc, char* argv[]) {
         
         //scene.Draw(viper::GetEngine().GetRenderer());
 
+        //Draw
         text->Draw(viper::GetEngine().GetRenderer(), 40.0f, 40.0f);
-
-
 		game->Draw();
+
+
+        //present
         viper::GetEngine().GetRenderer().Present();
 
 }

@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Actor.h"
+#include "../Core/StringHelper.h"
 #include "../Renderer/Renderer.h"
 
 namespace viper {
@@ -17,6 +18,17 @@ namespace viper {
 	}
 
 	void Scene::AddActor(std::unique_ptr<class Actor> actor) {
+		actor->scene = this;
 		m_actors.push_back(std::move(actor));
+	}
+	Actor* Scene::GetActorByName(const std::string& name) {
+		for (auto& actor : m_actors) {
+			if (toLower(actor->name) == toLower(name)) {
+				return actor.get();
+			}
+		}
+
+
+		return nullptr;
 	}
 }

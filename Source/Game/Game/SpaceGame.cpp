@@ -19,8 +19,7 @@ bool SpaceGame::Initialize() {
 }
 
 void SpaceGame::Update(float dt) {
-    switch (m_gameState)
-    {
+    switch (m_gameState) {
     case SpaceGame::GameState::Initialize:
         m_gameState = GameState::Title;
         break;
@@ -34,8 +33,7 @@ void SpaceGame::Update(float dt) {
         m_lives = 3;
         m_gameState = GameState::StartRound;
         break;
-    case SpaceGame::GameState::StartRound:
-    {
+    case SpaceGame::GameState::StartRound: {
         std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::points, viper::vec3{ 0.0f, 0.4f, 1.0f });
 
         viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 3 };
@@ -55,6 +53,7 @@ void SpaceGame::Update(float dt) {
             m_enemySpawnTimer = 4;
         }
 
+        /*
         std::shared_ptr<viper::Model> enemyModel = std::make_shared<viper::Model>(GameData::points, viper::vec3{ viper::random::getReal(), viper::random::getReal(), viper::random::getReal() });
         viper::Transform transform{ viper::vec2{ viper::random::getReal() * viper::GetEngine().GetRenderer().GetWidth(), viper::random::getReal() * viper::GetEngine().GetRenderer().GetHeight() }, 0, 10 };
         std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(transform, enemyModel);
@@ -62,6 +61,7 @@ void SpaceGame::Update(float dt) {
         enemy->speed = (viper::random::getReal() * 800) + 500;
         enemy->tag = "enemy";
         m_scene->AddActor(std::move(enemy));
+        */
     
 
         break;
@@ -79,6 +79,7 @@ void SpaceGame::Update(float dt) {
 }
 
 void SpaceGame::Shutdown() {
+    //
 }
 
 void SpaceGame::Draw() {

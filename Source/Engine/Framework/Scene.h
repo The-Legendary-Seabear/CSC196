@@ -31,10 +31,9 @@ namespace viper {
 	};
 
 	template<typename T>
-	inline T* Scene::GetActorByName(const std::string& name)
-	{
+	inline T* Scene::GetActorByName(const std::string& name) {
 		std::vector<T*> results;
-		for (auto actor : m_actors) {
+		for (auto& actor : m_actors) {
 			if (viper::toLower(actor->name) == viper::toLower(name)) {
 				T* object = dynamic_cast<T*>(actor.get());
 				if (object) {
@@ -47,8 +46,7 @@ namespace viper {
 	}
 
 	template<typename T>
-	inline std::vector<T*> Scene::GetActorsByTag(const std::string& tag)
-	{
+	inline std::vector<T*> Scene::GetActorsByTag(const std::string& tag) {
 		std::vector<T*> results;
 		for (auto actor : m_actors) {
 			if (viper::toLower(actor->tag) == viper::toLower(tag)) {

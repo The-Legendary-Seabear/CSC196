@@ -2,6 +2,11 @@
 #include "Engine.h"
 #include "Input/InputSystem.h"
 #include "Renderer/Renderer.h"
+#include "GameData.h"
+#include "Math/Vector3.h"
+#include "Rocket.h"
+#include "Framework/Scene.h"
+#include "Renderer/Model.h"
 
 void Player::Update(float dt) {
     
@@ -26,9 +31,30 @@ void Player::Update(float dt) {
     transform.position.y = viper::math::wrap(transform.position.y, 0.0f, (float)viper::GetEngine().GetRenderer().GetHeight());
 
     //check fire key pressed
+    fireTime -= dt;
+    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_SPACE) && fireTimer <= 0) {
+        fireTimer = fireTime;
+
+        std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::points, viper::vec3{ 1.0f, 1.0f, 1.0f });
     //spawn rocket at player position and rotation
+        viper::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
+        auto rocket = std::make_unique<Rocket>(transform, model);
+
+        rocket->speed = 5000.0f;
+        rocket->lifespan = 1.5f;
+        rocket->tag = "player";
+        rocket->name = "rocket";
+
+        scene->AddActor(std::move(rocket));
+    }
 
     Actor::Update(dt);
 
    
+}
+
+void Player::OnCollision(Actor* other) {
+    if (tag != other->tag) {
+        destroyed = true;
+    }
 }

@@ -22,7 +22,7 @@ namespace viper {
 	public:
 		ParticleSystem() = default;
 
-		bool Initialize();
+		bool Initialize(int poolSize = 1000);
 		void Shutdown();
 
 		void Update(float dt);

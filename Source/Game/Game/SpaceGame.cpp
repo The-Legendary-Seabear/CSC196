@@ -10,6 +10,7 @@
 #include "Input/InputSystem.h"
 #include "GameData.h"
 #include "Renderer/ParticleSystem.h"
+#include "Framework/Actor.h"
 
 #include <vector>
 
@@ -20,7 +21,11 @@ bool SpaceGame::Initialize() {
     m_titleFont->Load("Archeologicaps.ttf", 128);
 
     m_uiFont = std::make_shared<viper::Font>();
-    m_uiFont->Load("Archeologicaps.ttf", 128);
+    m_uiFont->Load("Archeologicaps.ttf", 48);
+
+    m_titleText = std::make_unique<viper::Text>(m_titleFont);
+    m_scoreText = std::make_unique<viper::Text>(m_uiFont);
+    m_livesText = std::make_unique<viper::Text>(m_uiFont);
 
     return true;
 }
@@ -62,17 +67,9 @@ void SpaceGame::Update(float dt) {
         
         m_enemySpawnTimer -= dt;
         if (m_enemySpawnTimer <= 0) {
-            m_enemySpawnTimer = 10;
-
-        std::shared_ptr<viper::Model> enemyModel = std::make_shared<viper::Model>(GameData::points, viper::vec3{ 1, 0, 0 });
-        viper::Transform transform{ viper::vec2{ viper::random::getReal() * viper::GetEngine().GetRenderer().GetWidth(), viper::random::getReal() * viper::GetEngine().GetRenderer().GetHeight() }, 0, 10 };
-        std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(transform, enemyModel);
-        enemy->damping = 0.2f;
-        enemy->fireTime = 3;
-        enemy->fireTimer = 5;
-        enemy->speed = (viper::random::getReal() * 200) + 300;
-        enemy->tag = "enemy";
-        m_scene->AddActor(std::move(enemy));
+            m_enemySpawnTimer = 4;
+            SpawnEnemy();
+        
 
         }
 
@@ -81,7 +78,10 @@ void SpaceGame::Update(float dt) {
         m_stateTimer -= dt;
         if (m_stateTimer <= 0) {
         m_lives--;
-        if (m_lives == 0) m_gameState = GameState::GameOver;
+        if (m_lives == 0) { 
+            m_gameState = GameState::GameOver; 
+			m_stateTimer = 3;
+        }
         else m_gameState = GameState::StartRound;
         }
         break;
@@ -95,6 +95,9 @@ void SpaceGame::Update(float dt) {
     default:
         break;
     }
+
+    //if (viper::GetEngine().GetInput())
+
     m_scene->Update(viper::GetEngine().GetTime().GetDeltaTime());
 }
 
@@ -104,23 +107,22 @@ void SpaceGame::Shutdown() {
 
 void SpaceGame::Draw(viper::Renderer& renderer) {
     if (m_gameState == GameState::Title) {
-	m_titleText->Create(renderer, "PIT VIPER", viper::vec3{ 1, 0, 0 });
-    m_titleText->Draw(renderer, 600, 600);
-
+    
+	m_titleText->Create(renderer, "PIT VIPER", viper::vec3{ 1, 0, 0 }); //exception thrown when this line of code trys to create
+    m_titleText->Draw(renderer, 200, 400);
     }
+
     if (m_gameState == GameState::GameOver) {
         m_titleText->Create(renderer, "GAME OVER", viper::vec3{ 1, 0, 0 });
-        m_titleText->Draw(renderer, 600, 600);
-
+        m_titleText->Draw(renderer, 150, 400);
     }
 
     m_scoreText->Create(renderer, std::to_string(m_score), { 1, 1, 1 });
     m_scoreText->Draw(renderer, 20, 20);
 
     m_livesText->Create(renderer, "LIVES: " + std::to_string(m_lives), {1, 1, 1});
-    m_livesText->Draw(renderer, renderer.GetWidth() - 100, 20);
-
-
+    m_livesText->Draw(renderer, renderer.GetWidth() - 250, 20);
+    
     m_scene->Draw(renderer);
 
     viper::GetEngine().GetPS().Draw(renderer);
@@ -131,3 +133,25 @@ void SpaceGame::OnPlayerDeath() {
     m_gameState = GameState::PlayerDead;
     m_stateTimer = 2;
 }
+
+void SpaceGame::SpawnEnemy() {
+
+    viper::Actor* player = m_scene->GetActorByName<viper::Actor>("player");
+    if (player) {
+        std::shared_ptr<viper::Model> enemyModel = std::make_shared<viper::Model>(GameData::points, viper::vec3{ 1, 1, 1 });
+
+
+        viper::vec2 position = player->transform.position + viper::random::OnUnitCircle() * viper::random::getReal(200.0f, 500.0f);
+        viper::Transform transform{ position, 0, 10 };
+
+
+        std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(transform, enemyModel);
+        enemy->damping = 0.5f;
+        enemy->fireTime = 3;
+        enemy->fireTimer = 5;
+        enemy->speed = (viper::random::getReal() * 200) + 300;
+        enemy->tag = "enemy";
+        m_scene->AddActor(std::move(enemy));
+    }
+}
+

@@ -23,7 +23,7 @@ namespace viper {
 		m_audio->Inititalize();
 
 		m_particleSystem = std::make_unique<viper::ParticleSystem>();
-		m_particleSystem->Initialize();
+		m_particleSystem->Initialize(5000);
 
 
 
@@ -47,7 +47,7 @@ namespace viper {
 	}
 
 	void Engine::Draw() {
-		//
+		m_particleSystem->Draw(*m_renderer);
 	}
 
 

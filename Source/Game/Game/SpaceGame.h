@@ -27,6 +27,9 @@ public:
 	void OnPlayerDeath();
 
 private:
+	void SpawnEnemy();
+
+private:
 	GameState m_gameState = GameState::Initialize;
 	float m_enemySpawnTimer{ 0 };
 	float m_stateTimer{ 0 };

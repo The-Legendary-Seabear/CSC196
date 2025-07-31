@@ -12,25 +12,29 @@
 #include "Core/Random.h"
 
 void Player::Update(float dt) {
-    
-    viper::Particle particle;
-    particle.position = transform.position;
-    particle.velocity = viper::vec2{ viper::random::getReal(-200.0f , 200.0f), viper::random::getReal(-200.0f , 200.0f ) };
-    particle.color = { 1, 1, 1 };
-    particle.lifespan = 2;
-    viper::GetEngine().GetPS().AddParticle(particle);
+  
 
 
     float rotate = 0;
-    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_A)) rotate -= 1;
-    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_D)) rotate += 1;
+    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_A)) { 
+        CreateParticle();
+        rotate -= 1;
+    }
+    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_D)) { 
+        CreateParticle();
+        rotate += 1; }
 
     transform.rotation += (rotate * rotationRate) * dt;
 
     //thrust
     float thrust = 0;
-    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_W)) thrust = 1;
-	if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_S)) thrust = -1;
+    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_W)) { 
+        CreateParticle();
+        thrust = 1;
+    }
+    if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_S)) { 
+        CreateParticle();
+        thrust = -1; }
 
     viper::vec2 direction{ 1, 0 };
     viper::vec2 force = direction.Rotate(viper::math::degToRad(transform.rotation)) * thrust * speed;
@@ -40,7 +44,7 @@ void Player::Update(float dt) {
     transform.position.y = viper::math::wrap(transform.position.y, 0.0f, (float)viper::GetEngine().GetRenderer().GetHeight());
 
     //check fire key pressed
-    fireTime -= dt;
+    fireTimer -= dt;
     if (viper::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_SPACE) && fireTimer <= 0) {
         fireTimer = fireTime;
 
@@ -49,10 +53,11 @@ void Player::Update(float dt) {
         viper::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
         auto rocket = std::make_unique<Rocket>(transform, model);
 
-        rocket->speed = 5000.0f;
+        rocket->speed = 500.0f;
         rocket->lifespan = 1.5f;
         rocket->tag = "player";
         rocket->name = "rocket";
+        
 
         scene->AddActor(std::move(rocket));
     }
@@ -68,3 +73,14 @@ void Player::OnCollision(Actor* other) {
         dynamic_cast<SpaceGame*>(scene->GetGame())->OnPlayerDeath();
     }
 }
+
+void Player::CreateParticle() {
+    viper::Particle particle;
+    particle.position = transform.position;
+    particle.velocity = viper::vec2{ viper::random::getReal(-200.0f , 200.0f), viper::random::getReal(-200.0f , 200.0f) };
+    particle.color = { 1, 1, 1 };
+    particle.lifespan = 2;
+    viper::GetEngine().GetPS().AddParticle(particle);
+}
+
+

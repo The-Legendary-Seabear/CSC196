@@ -3,9 +3,9 @@
 
 namespace viper {
 
-	bool ParticleSystem::Initialize() {
+	bool ParticleSystem::Initialize(int poolSize) {
 		//reserve particles in pool
-		m_particles.resize(1000);
+		m_particles.resize(poolSize);
 
 
 		return true;
@@ -45,7 +45,7 @@ namespace viper {
 
 	Particle* ParticleSystem::GetFreeParticle() {
 		for (auto& particle : m_particles) {
-			if (!particle.active == false) return &particle;
+			if (particle.active == false) return &particle;
 		}
 
 		return nullptr;

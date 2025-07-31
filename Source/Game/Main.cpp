@@ -30,6 +30,7 @@
 
 int main(int argc, char* argv[]) {
    
+    viper::SetCurrentDirectory("Assets");
 
    //initialize engine
     viper::GetEngine().Initialize();
@@ -98,6 +99,8 @@ int main(int argc, char* argv[]) {
 
         viper::GetEngine().GetRenderer().SetColor((float)color.r, (float)color.g, (float)color.b);
         viper::GetEngine().GetRenderer().Clear();
+
+        viper::GetEngine().Draw();
 
 		//model.Draw(renderer, input.GetMousePosition(), time.GetTime(), 10);
         

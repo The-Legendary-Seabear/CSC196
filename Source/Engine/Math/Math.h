@@ -43,6 +43,18 @@ inline float wrap(float value, float min, float max) {
 	return min + result;
 }
 
+
+/// <summary>
+/// Determines the sign of a number.
+/// </summary>
+/// <typeparam name="T">The type of the value to check.</typeparam>
+/// <param name="v">The value whose sign is to be determined.</param>
+/// <returns>Returns -1 if the value is negative, 1 if positive, and 0 if zero.</returns>
+template<typename T>
+inline T sign(T v) {
+	return (v < 0) ? (T)-1 : (v > 0) ? (T)1 : (T)0;
+}
+
 using std::min;
 using std::max;
 using std::clamp;
@@ -54,6 +66,8 @@ using std::cos;
 using std::cosf;
 using std::atan2;
 using std::atan2f;
+using std::acosf;
+using std::acos;
 }
 
 }

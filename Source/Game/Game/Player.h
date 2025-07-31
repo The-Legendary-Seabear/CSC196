@@ -6,7 +6,7 @@ class Player : public viper::Actor {
 public:
 	float speed = 200;
 	float rotationRate = 180;
-	float fireTime = 0.2f;
+	float fireTime = 0.5f;
 	float fireTimer = 0.0f;
 
 public:
@@ -18,6 +18,6 @@ public:
 
 	void OnCollision(Actor* other) override;
 private:
-
+	void CreateParticle();
 
 };

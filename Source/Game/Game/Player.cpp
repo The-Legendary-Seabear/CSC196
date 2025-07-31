@@ -7,9 +7,18 @@
 #include "Rocket.h"
 #include "Framework/Scene.h"
 #include "Renderer/Model.h"
+#include "SpaceGame.h"
+#include "Renderer/ParticleSystem.h"
+#include "Core/Random.h"
 
 void Player::Update(float dt) {
     
+    viper::Particle particle;
+    particle.position = transform.position;
+    particle.velocity = viper::vec2{ viper::random::getReal(-200.0f , 200.0f), viper::random::getReal(-200.0f , 200.0f ) };
+    particle.color = { 1, 1, 1 };
+    particle.lifespan = 2;
+    viper::GetEngine().GetPS().AddParticle(particle);
 
 
     float rotate = 0;
@@ -56,5 +65,6 @@ void Player::Update(float dt) {
 void Player::OnCollision(Actor* other) {
     if (tag != other->tag) {
         destroyed = true;
+        dynamic_cast<SpaceGame*>(scene->GetGame())->OnPlayerDeath();
     }
 }

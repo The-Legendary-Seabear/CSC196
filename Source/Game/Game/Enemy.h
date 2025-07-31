@@ -3,7 +3,9 @@
 
 class Enemy : public viper::Actor {
 public:
-	float speed = 20.0f;
+	float speed = 100.0f;
+	float fireTimer = 0;
+	float fireTime = 0;
 
 public:
 	Enemy() = default;

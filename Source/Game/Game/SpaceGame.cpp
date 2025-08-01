@@ -11,11 +11,17 @@
 #include "GameData.h"
 #include "Renderer/ParticleSystem.h"
 #include "Framework/Actor.h"
+#include "Audio/AudioSystem.h"
+#include "Core/File.h"
 
 #include <vector>
+#include <iostream>
+
 
 bool SpaceGame::Initialize() {
     m_scene = std::make_unique<viper::Scene>(this);
+
+	
 
     m_titleFont = std::make_shared<viper::Font>();
     m_titleFont->Load("Archeologicaps.ttf", 128);
@@ -26,6 +32,10 @@ bool SpaceGame::Initialize() {
     m_titleText = std::make_unique<viper::Text>(m_titleFont);
     m_scoreText = std::make_unique<viper::Text>(m_uiFont);
     m_livesText = std::make_unique<viper::Text>(m_uiFont);
+
+    
+	
+
 
     return true;
 }
@@ -49,11 +59,17 @@ void SpaceGame::Update(float dt) {
         m_scene->RemoveAllActors();
 
 
+        if (!m_backgroundMusicStarted) {
+            viper::GetEngine().GetAudio().PlaySound("tetris");
+            m_backgroundMusicStarted = true;
+        }
+
+
         std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::points, viper::vec3{ 0.0f, 0.4f, 1.0f });
         viper::Transform transform{ viper::vec2{viper::GetEngine().GetRenderer().GetWidth() * 0.5f, viper::GetEngine().GetRenderer().GetHeight() * 0.5f}, 0, 3 };
         auto player = std::make_unique<Player>(transform, model);
 
-        player->speed = 1500.0f;
+        player->speed = 500.0f;
         player->rotationRate = 180.0f;
         player->damping = 1.5f;
         player->tag = "player";
@@ -67,7 +83,7 @@ void SpaceGame::Update(float dt) {
         
         m_enemySpawnTimer -= dt;
         if (m_enemySpawnTimer <= 0) {
-            m_enemySpawnTimer = 4;
+            m_enemySpawnTimer = 1;
             SpawnEnemy();
         
 
@@ -75,6 +91,7 @@ void SpaceGame::Update(float dt) {
 
         break;
     case SpaceGame::GameState::PlayerDead:
+        
         m_stateTimer -= dt;
         if (m_stateTimer <= 0) {
         m_lives--;
@@ -87,6 +104,7 @@ void SpaceGame::Update(float dt) {
         break;
     case SpaceGame::GameState::GameOver:
         m_stateTimer -= dt;
+        viper::GetEngine().GetAudio().StopSound();
         if (m_stateTimer <= 0) {
         m_gameState = GameState::Title;
         m_stateTimer = 3;
@@ -138,7 +156,7 @@ void SpaceGame::SpawnEnemy() {
 
     viper::Actor* player = m_scene->GetActorByName<viper::Actor>("player");
     if (player) {
-        std::shared_ptr<viper::Model> enemyModel = std::make_shared<viper::Model>(GameData::points, viper::vec3{ 1, 1, 1 });
+        std::shared_ptr<viper::Model> enemyModel = std::make_shared<viper::Model>(GameData::enemyDesign, viper::vec3{ 1, 1, 1 });
 
 
         viper::vec2 position = player->transform.position + viper::random::OnUnitCircle() * viper::random::getReal(200.0f, 500.0f);
@@ -149,7 +167,7 @@ void SpaceGame::SpawnEnemy() {
         enemy->damping = 0.5f;
         enemy->fireTime = 3;
         enemy->fireTimer = 5;
-        enemy->speed = (viper::random::getReal() * 200) + 300;
+        enemy->speed = (viper::random::getReal() * 200) + 100;
         enemy->tag = "enemy";
         m_scene->AddActor(std::move(enemy));
     }

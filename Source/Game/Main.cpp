@@ -49,7 +49,10 @@ int main(int argc, char* argv[]) {
     //viper::Text* text = new viper::Text(font);
     //text->Create(viper::GetEngine().GetRenderer(), "Hello World", viper::vec3{ 1, 1, 1});
 
-    
+    viper::GetEngine().GetAudio().Inititalize();
+    viper::GetEngine().GetAudio().AddSound("laser_shoot.wav", "laser");
+    viper::GetEngine().GetAudio().AddBackGroundMusic("tetris.wav", "tetris");
+
     FMOD::Sound* sound = nullptr;
     
     std::vector<FMOD::Sound*> sounds;

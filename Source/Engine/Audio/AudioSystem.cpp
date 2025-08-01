@@ -79,6 +79,29 @@ namespace viper {
 		return true;
 	}
 
+	bool AudioSystem::AddBackGroundMusic(const std::string& fileName, const std::string& name) {
+		std::string key = (name.empty() ? fileName : name);
+
+		//convert to lowercase
+		key = toLower(key);
+
+		//check if key exists in sounds map
+		if (m_sounds.find(key) != m_sounds.end()) {
+			std::cerr << "Audio System : name already exists " << key << std::endl;
+			return false;
+		}
+		FMOD::Sound* sound = nullptr;
+
+		//create sound from key
+		FMOD_RESULT result = m_system->createSound(fileName.c_str(), FMOD_LOOP_NORMAL, 0, &sound);
+		if (!CheckFMODResult(result)) return false;
+
+		//insert sound into map
+		m_sounds[key] = sound;
+		//audio->createSound(fileName.c_str(), FMOD_DEFAULT, 0, &sound);
+		return true;
+	}
+
 	bool AudioSystem::PlaySound(const std::string& name) {
 
 		//audio->playSound(sounds[2], 0, false, nullptr);
@@ -94,9 +117,23 @@ namespace viper {
 			std::cerr << "Audio System : name already exists " << key << std::endl;
 			return false;
 		}
+
+		FMOD::Channel* channel = nullptr;
+
 		//play cound from key
 		FMOD_RESULT result = m_system->playSound(m_sounds[key], 0, false, nullptr);
+
+		m_channels[key] = channel;
 		
 		return true;
 	}
+	bool AudioSystem::StopSound() {
+
+		FMOD::ChannelGroup* masterGroup = nullptr;
+		if (m_system->getMasterChannelGroup(&masterGroup) == FMOD_OK && masterGroup) {
+			masterGroup->stop();
+		}
+		return true;
+	}
+	
 }

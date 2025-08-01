@@ -40,4 +40,6 @@ private:
 	std::unique_ptr< class viper::Text> m_titleText;
 	std::unique_ptr< class viper::Text> m_scoreText;
 	std::unique_ptr< class viper::Text> m_livesText;
+
+	bool m_backgroundMusicStarted = false;
 };

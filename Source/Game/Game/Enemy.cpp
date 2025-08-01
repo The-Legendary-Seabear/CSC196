@@ -11,6 +11,7 @@
 #include "Core/Random.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
+#include "FireratePowerup.h"
 
 
 void Enemy::Update(float dt) {
@@ -51,7 +52,7 @@ void Enemy::Update(float dt) {
     if (fireTimer <= 0 && playerSeen) {
         fireTimer = fireTime;
 
-        std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::points, viper::vec3{ 1.0f, 1.0f, 1.0f });
+        std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::enemyDesign, viper::vec3{ 1.0f, 1.0f, 1.0f });
         //spawn rocket at player position and rotation
         viper::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
         auto rocket = std::make_unique<Rocket>(transform, model);
@@ -68,9 +69,19 @@ void Enemy::Update(float dt) {
 }
 
 void Enemy::OnCollision(Actor* other) {
-    if (tag != other->tag) {
+    if (tag != other->tag && other->tag != "powerup") {
         destroyed = true;
         scene->GetGame()->AddPoints(100);
+
+
+        int randNum = viper::random::getInt(0, 100);
+        if (randNum < 5) {
+            std::shared_ptr<viper::Model> model = std::make_shared <viper::Model>(GameData::boost, viper::vec3{ 1.0f, 1.0f, 1.0f });
+            FireratePowerup* powerup = new FireratePowerup(viper::Transform{ transform.position, 0.0f, 15.0f } , model);
+            scene->AddActor(std::unique_ptr<Actor>(powerup));
+        }
+
+
         for (int i = 0; i < 100; i++) {
             viper::Particle particle;
             particle.position = transform.position;

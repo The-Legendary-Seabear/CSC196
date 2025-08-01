@@ -156,7 +156,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\Enemy.cpp" />
+    <ClCompile Include="Game\FireratePowerup.cpp" />
     <ClCompile Include="Game\GameData.cpp" />
+    <ClCompile Include="Game\Laser.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\Rocket.cpp" />
     <ClCompile Include="Game\SpaceGame.cpp" />
@@ -169,7 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Enemy.h" />
+    <ClInclude Include="Game\FireratePowerup.h" />
     <ClInclude Include="Game\GameData.h" />
+    <ClInclude Include="Game\Laser.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Rocket.h" />
     <ClInclude Include="Game\SpaceGame.h" />
